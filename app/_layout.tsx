@@ -1,24 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import FontsProvider, { useFonts } from '@/provider/fonts-provider'
+import { tamaguiConfig } from '@/tamagui.config'
+import { ClerkProvider } from '@clerk/clerk-expo'
+import { tokenCache } from '@clerk/clerk-expo/token-cache'
+import { Slot } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { PortalProvider, TamaguiProvider } from 'tamagui'
 
 export const unstable_settings = {
   anchor: '(tabs)',
-};
+}
+
+const PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key')
+}
+
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    <FontsProvider>
+      <FontsLoader>
+        <SafeAreaProvider>
+          <ClerkProvider tokenCache={tokenCache}>
+            <TamaguiProvider config={tamaguiConfig}>
+              <PortalProvider shouldAddRootHost>
+                <Slot />
+              </PortalProvider>
+            </TamaguiProvider>
+          </ClerkProvider>
+        </SafeAreaProvider>
+      </FontsLoader>
+    </FontsProvider>
+  )
+}
+
+function FontsLoader({ children }: { children: React.ReactNode }) {
+  const { fontsLoaded } = useFonts()
+
+  if (!fontsLoaded) {
+    return null
+  }
+
+  return <>{children}</>
 }
