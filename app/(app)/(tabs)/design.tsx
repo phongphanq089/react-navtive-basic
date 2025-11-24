@@ -5,7 +5,7 @@ import { View } from 'tamagui'
 
 const Page = () => {
   return (
-    <View>
+    <View style={{ padding: 10, paddingTop: 70 }}>
       <View>
         <H1 text={'left'} color={'$accent1'}>
           Welcome Back!

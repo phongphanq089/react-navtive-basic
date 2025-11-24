@@ -8,17 +8,17 @@ export default function Layout() {
   if (!isLoaded) {
     return <Spinner />
   }
-
+  console.log(isSignedIn, '=====>')
   return (
     <Stack>
-      <Stack.Protected guard={isSignedIn}>
+      <Stack.Protected guard={!isSignedIn}>
         <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
         <Stack.Screen name='new-entry' options={{ headerShown: false }} />
         <Stack.Screen name='edit-entry/[id]' options={{ headerShown: false }} />
         <Stack.Screen name='entry/[id]' options={{ headerShown: false }} />
       </Stack.Protected>
 
-      <Stack.Protected guard={!isSignedIn}>
+      <Stack.Protected guard={isSignedIn}>
         <Stack.Screen
           name='sign-in'
           options={{

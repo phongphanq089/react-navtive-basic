@@ -21,9 +21,9 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   return (
-    <FontsProvider>
-      <FontsLoader>
-        <SafeAreaProvider>
+    <SafeAreaProvider>
+      <FontsProvider>
+        <FontsLoader>
           <ClerkProvider tokenCache={tokenCache}>
             <TamaguiProvider config={tamaguiConfig}>
               <PortalProvider shouldAddRootHost>
@@ -31,9 +31,9 @@ export default function RootLayout() {
               </PortalProvider>
             </TamaguiProvider>
           </ClerkProvider>
-        </SafeAreaProvider>
-      </FontsLoader>
-    </FontsProvider>
+        </FontsLoader>
+      </FontsProvider>
+    </SafeAreaProvider>
   )
 }
 
